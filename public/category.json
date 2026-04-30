@@ -1,0 +1,32 @@
+    [
+    {
+        "id": "cat-1",
+        "name": "Story",
+        "slug": "story",
+        "description": "Fictional tales, novels, and narratives that transport you to another world.",
+        "icon": "📖",
+        "totalBooks": 4,
+        "color": "#f97316",
+        "image_url": "https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1602190253i/52578297.jpg"
+    },
+    {
+        "id": "cat-2",
+        "name": "Tech",
+        "slug": "tech",
+        "description": "Programming, software engineering, and technology books for modern developers.",
+        "icon": "💻",
+        "totalBooks": 4,
+        "color": "#6366f1",
+        "image_url": "https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1436202607i/3735293.jpg"
+    },
+    {
+        "id": "cat-3",
+        "name": "Science",
+        "slug": "science",
+        "description": "Explore the universe, biology, physics, and the wonders of the natural world.",
+        "icon": "🔬",
+        "totalBooks": 4,
+        "color": "#10b981",
+        "image_url": "https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1333578746i/3869.jpg"
+    }
+    ]
