@@ -36,10 +36,11 @@
 
 
     const handleGoogleSignIn = async () => {
-        await authClient.signIn.social({
-            provider: "google",
-        });
-    }
+    await authClient.signIn.social({
+        provider: "google",
+        callbackURL: "/books",
+    });
+    };
 
 
 

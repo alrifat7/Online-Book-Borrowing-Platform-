@@ -32,11 +32,12 @@
         router.push("/");
     };
 
-        const handleGoogleSignIn = async () => {
-            await authClient.signIn.social({
-                provider: "google",
-            });
-        }
+    const handleGoogleSignIn = async () => {
+        await authClient.signIn.social({
+        provider: "google",
+        callbackURL: "/",
+        });
+    };
 
     return (
         <div className="min-h-screen bg-[#0f1117] flex items-center justify-center px-4 overflow-hidden relative">
@@ -132,8 +133,11 @@
             <div className="flex-1 h-px bg-white/[0.07]" />
             </div>
 
-            <div className="flex gap-3" onClick={handleGoogleSignIn}>
-            <button className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl border border-white/10 text-slate-400 text-sm font-medium hover:border-white/20 hover:text-white hover:bg-white/[0.04] transition-colors">
+            <div className="flex gap-3">
+            <button
+                onClick={handleGoogleSignIn}
+                className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl border border-white/10 text-slate-400 text-sm font-medium hover:border-white/20 hover:text-white hover:bg-white/[0.04] transition-colors"
+            >
                 <svg width="16" height="16" viewBox="0 0 24 24">
                 <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
                 <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
@@ -142,7 +146,6 @@
                 </svg>
                 Google
             </button>
-
             </div>
 
             <p className="mt-7 text-center text-sm text-slate-500">
