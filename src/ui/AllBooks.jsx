@@ -1,12 +1,12 @@
 "use client";
 
-import { useState, useMemo, useEffect } from "react"; 
+import { useState, useMemo, useEffect } from "react";
 import BooksCard from "@/ui/BooksCard";
 
 const CATEGORIES = ["All", "Story", "Tech", "Science"];
 
 const AllBooks = () => {
-  const [data, setData] = useState([]);     
+  const [data, setData] = useState([]);
   const [search, setSearch] = useState("");
   const [activeCategory, setActiveCategory] = useState("All");
   const [loading, setLoading] = useState(true);

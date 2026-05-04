@@ -5,7 +5,8 @@
     import { authClient } from "@/lib/auth-client";
     import { useRouter } from "next/navigation";
 
-    export default function LoginPage() {
+    export default function RegisterPage() {
+    const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
@@ -17,7 +18,8 @@
         setError("");
         setLoading(true);
 
-        const { data, error } = await authClient.signIn.email({
+        const { data, error } = await authClient.signUp.email({
+        name,
         email,
         password,
         });
@@ -25,11 +27,11 @@
         setLoading(false);
 
         if (error) {
-        setError(error.message || "Invalid email or password.");
+        setError(error.message || "Something went wrong. Please try again.");
         return;
         }
 
-        router.push("/");
+        router.push("/login");
     };
 
     return (
@@ -62,10 +64,10 @@
             </Link>
 
             <h1 className="text-[2rem] font-serif text-white leading-tight mb-2">
-            Welcome <em className="text-amber-400 not-italic">back</em>
+            Create an <em className="text-amber-400 not-italic">account</em>
             </h1>
             <p className="text-slate-500 text-sm mb-9 leading-relaxed">
-            Sign in to your account to continue your reading journey.
+            Join BookNest and start your reading journey today.
             </p>
 
             {error && (
@@ -75,6 +77,21 @@
             )}
 
             <form onSubmit={handleSubmit} className="space-y-5">
+            <div>
+                <label className="block text-[0.75rem] font-medium text-slate-400 uppercase tracking-widest mb-2">
+                Full Name
+                </label>
+                <input
+                type="text"
+                name="name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                placeholder="John Doe"
+                required
+                className="w-full px-4 py-3 rounded-xl bg-white/[0.05] border border-white/10 text-white text-sm placeholder:text-slate-600 outline-none focus:border-amber-400/50 focus:bg-white/[0.07] transition-colors"
+                />
+            </div>
+
             <div>
                 <label className="block text-[0.75rem] font-medium text-slate-400 uppercase tracking-widest mb-2">
                 Email
@@ -101,14 +118,10 @@
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
                 required
+                minLength={8}
                 className="w-full px-4 py-3 rounded-xl bg-white/[0.05] border border-white/10 text-white text-sm placeholder:text-slate-600 outline-none focus:border-amber-400/50 focus:bg-white/[0.07] transition-colors"
                 />
-            </div>
-
-            <div className="text-right -mt-2">
-                <Link href="/forgot-password" className="text-xs text-slate-500 hover:text-amber-400 transition-colors">
-                Forgot password?
-                </Link>
+                <p className="mt-1.5 text-xs text-slate-600">Minimum 8 characters</p>
             </div>
 
             <button
@@ -116,7 +129,7 @@
                 disabled={loading}
                 className="w-full py-3.5 rounded-xl bg-amber-400 hover:bg-amber-300 disabled:opacity-50 disabled:cursor-not-allowed text-slate-900 text-sm font-semibold transition-colors shadow-md shadow-amber-500/20"
             >
-                {loading ? "Signing in..." : "Sign In"}
+                {loading ? "Creating account..." : "Create Account"}
             </button>
             </form>
 
@@ -145,9 +158,9 @@
             </div>
 
             <p className="mt-7 text-center text-sm text-slate-500">
-            Don't have an account?{" "}
-            <Link href="/register" className="text-amber-400 font-medium hover:text-amber-300 transition-colors">
-                Sign up
+            Already have an account?{" "}
+            <Link href="/login" className="text-amber-400 font-medium hover:text-amber-300 transition-colors">
+                Sign in
             </Link>
             </p>
         </div>

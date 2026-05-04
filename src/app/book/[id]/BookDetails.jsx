@@ -3,16 +3,21 @@
     import { useEffect, useState } from "react";
     import { useRouter } from "next/navigation";
     import toast, { Toaster } from "react-hot-toast";
+    import { authClient } from "@/lib/auth-client";
 
     const BookDetails = ({ id }) => {
     const [book, setBook] = useState(null);
     const [loading, setLoading] = useState(true);
-    const [user, setUser] = useState(null);
+    const { data: session, isPending } = authClient.useSession();
     const router = useRouter();
 
     useEffect(() => {
-        const loggedInUser = localStorage.getItem("user");
-        if (loggedInUser) setUser(JSON.parse(loggedInUser));
+        if (isPending) return;
+
+        if (!session?.user) {
+        router.push("/login");
+        return;
+        }
 
         fetch("/data.json")
         .then((res) => res.json())
@@ -22,13 +27,9 @@
             setLoading(false);
         })
         .catch(() => setLoading(false));
-    }, [id]);
+    }, [id, session, isPending]);
 
     const handleBorrow = () => {
-        if (!user) {
-        router.push("/login");
-        return;
-        }
         toast.success("Book borrowed successfully!", {
         style: {
             background: "#1e293b",
@@ -39,7 +40,7 @@
         });
     };
 
-    if (loading) {
+    if (isPending || loading) {
         return (
         <div className="min-h-screen bg-[#0f1117] flex items-center justify-center">
             <div className="w-10 h-10 rounded-full border-2 border-amber-400/30 border-t-amber-400 animate-spin" />
@@ -67,7 +68,6 @@
         <section className="min-h-screen bg-[#0f1117] py-16 px-4 sm:px-6 lg:px-8">
         <Toaster position="top-right" />
         <div className="max-w-5xl mx-auto">
-
             <div className="flex flex-col md:flex-row gap-10 bg-white/[0.03] border border-white/[0.07] rounded-2xl overflow-hidden p-6 sm:p-10">
 
             {/* Left - Cover Image */}
@@ -87,7 +87,6 @@
             {/* Right - Details */}
             <div className="flex flex-col flex-1 justify-between gap-6">
                 <div>
-
                 <div className="flex items-center gap-3 mb-4 flex-wrap">
                     <span className={`text-[11px] font-semibold px-3 py-1 rounded-full border ${categoryColor[category] || categoryColor["Story"]}`}>
                     {category}
@@ -127,7 +126,6 @@
                 >
                 {available_quantity > 0 ? "Borrow This Book" : "Not Available"}
                 </button>
-
             </div>
             </div>
         </div>

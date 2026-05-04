@@ -2,12 +2,9 @@
 
     import { useState, useEffect } from "react";
     import Link from "next/link";
-    import { usePathname } from "next/navigation";
-
-    function useMockSession() {
-    const [session, setSession] = useState(null);
-    return { session, setSession };
-    }
+    import Image from "next/image";
+    import { usePathname, useRouter } from "next/navigation";
+    import { authClient } from "@/lib/auth-client";
 
     const NAV_LINKS = [
     { href: "/", label: "Home" },
@@ -17,7 +14,8 @@
 
     export default function Navbar() {
     const pathname = usePathname();
-    const { session, setSession } = useMockSession();
+    const router = useRouter();
+    const { data: session, isPending } = authClient.useSession();
     const [menuOpen, setMenuOpen] = useState(false);
     const [scrolled, setScrolled] = useState(false);
 
@@ -28,6 +26,11 @@
     }, []);
 
     useEffect(() => setMenuOpen(false), [pathname]);
+
+    const handleLogout = async () => {
+        await authClient.signOut();
+        router.push("/login");
+    };
 
     const initials = session?.user?.name
         ? session.user.name
@@ -85,14 +88,16 @@
                 </ul>
 
                 <div className="hidden md:flex items-center gap-3">
-                {session ? (
+                {!isPending && session?.user ? (
                     <>
                     <div className="flex items-center gap-2.5">
-                        <div className="w-8 h-8 rounded-full bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center text-white text-xs font-bold shadow">
+                        <div className="w-8 h-8 rounded-full bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center text-white text-xs font-bold shadow overflow-hidden">
                         {session.user?.image ? (
-                            <img
+                            <Image
                             src={session.user.image}
                             alt={session.user.name}
+                            width={32}
+                            height={32}
                             className="w-full h-full rounded-full object-cover"
                             />
                         ) : (
@@ -104,7 +109,7 @@
                         </span>
                     </div>
                     <button
-                        onClick={() => setSession(null)}
+                        onClick={handleLogout}
                         className="flex items-center gap-1.5 px-4 py-1.5 rounded-md border border-slate-600 text-slate-300 text-sm font-medium hover:border-red-500 hover:text-red-400 transition-colors duration-200"
                     >
                         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" className="flex-shrink-0">
@@ -155,18 +160,28 @@
                 );
                 })}
                 <div className="pt-3 mt-3 border-t border-slate-800">
-                {session ? (
+                {!isPending && session?.user ? (
                     <div className="flex items-center justify-between px-3">
                     <div className="flex items-center gap-2.5">
-                        <div className="w-8 h-8 rounded-full bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center text-white text-xs font-bold">
-                        {initials}
+                        <div className="w-8 h-8 rounded-full bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center text-white text-xs font-bold overflow-hidden">
+                        {session.user?.image ? (
+                            <Image
+                            src={session.user.image}
+                            alt={session.user.name}
+                            width={32}
+                            height={32}
+                            className="w-full h-full rounded-full object-cover"
+                            />
+                        ) : (
+                            initials
+                        )}
                         </div>
                         <span className="text-slate-200 text-sm font-medium">
                         {session.user?.name}
                         </span>
                     </div>
                     <button
-                        onClick={() => setSession(null)}
+                        onClick={handleLogout}
                         className="px-3 py-1.5 rounded-md border border-slate-700 text-slate-400 text-xs font-medium hover:border-red-500 hover:text-red-400 transition-colors"
                     >
                         Logout
