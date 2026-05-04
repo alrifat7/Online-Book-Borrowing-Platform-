@@ -1,5 +1,5 @@
 import { createAuthClient } from "better-auth/react"
 export const authClient = createAuthClient({
 
-    baseURL: "http://localhost:3000"
+    baseURL: "https://online-book-borrowing-platform-git-main-alrifat7s-projects.vercel.app"
 })
